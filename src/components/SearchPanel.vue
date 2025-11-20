@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import axios from 'axios'
-// เพิ่ม icon 'Calculator' เข้ามาสำหรับแสดงคะแนน Naranjo
-import { Search, AlertTriangle, Calendar, User, FileText, XCircle, Calculator } from 'lucide-vue-next'
+import { Search, AlertTriangle, Calendar, User, FileText, XCircle, Calculator, UserCircle2 } from 'lucide-vue-next'
 import type { HistoryItem } from '../types'
-import { isValidHN, isValidCID, isNumeric } from '../utils/validators'
+import { isValidCID, isNumeric } from '../utils/validators'
 
 const props = defineProps<{ apiUrl: string }>()
 
@@ -19,26 +18,29 @@ const handleSearch = async () => {
     const input = query.value.trim()
 
     if (!input) {
-        errorMsg.value = 'กรุณาระบุ HN หรือ เลขบัตรประชาชน'
+        errorMsg.value = 'กรุณาระบุ HN, เลขบัตรฯ หรือ ชื่อ-นามสกุล'
         return
     }
 
-    // ✅ แก้ไข 1: ใช้ isValidHN จาก utils แทนการเขียน logic เอง (แก้ warning unused import)
-    const isHN = isValidHN(input)
-    const isCID = input.length === 13 && isNumeric(input)
+    // Logic Validation:
+    // 1. ถ้าเป็นตัวเลขล้วน -> บังคับ HN(7) หรือ CID(13)
+    // 2. ถ้ามีตัวหนังสือ -> อนุญาตให้ค้นหาเป็นชื่อได้เลย
 
-    if (!isHN && !isCID) {
-        errorMsg.value = 'กรุณาระบุ HN (7 หลัก) หรือ เลขบัตรฯ (13 หลัก) ให้ถูกต้อง'
-        return
+    if (isNumeric(input)) {
+        const isHN = input.length === 7
+        const isCID = input.length === 13
+
+        if (!isHN && !isCID) {
+            errorMsg.value = 'ตัวเลขต้องเป็น HN (7 หลัก) หรือ CID (13 หลัก)'
+            return
+        }
+        if (isCID && !isValidCID(input)) {
+            errorMsg.value = 'เลขบัตรประชาชนไม่ถูกต้อง (Checksum Error)'
+            return
+        }
     }
+    // ถ้าไม่ใช่ตัวเลข (เช่น "สมชาย") -> ให้ผ่านไปค้นหาชื่อได้เลย
 
-    // ถ้าเป็น 13 หลัก ให้เช็คสูตรเลขบัตรฯ ด้วย
-    if (isCID && !isValidCID(input)) {
-        errorMsg.value = 'เลขบัตรประชาชนไม่ถูกต้อง (Checksum Error)'
-        return
-    }
-
-    // ผ่านการตรวจสอบ -> เริ่มค้นหา
     loading.value = true
     searched.value = false
     results.value = []
@@ -67,11 +69,10 @@ const handleSearch = async () => {
             </h2>
 
             <div class="relative">
-                <input v-model="query" @keyup.enter="handleSearch" @input="errorMsg = ''" type="text" maxlength="13"
-                    placeholder="ระบุ HN (7 หลัก) หรือ CID (13 หลัก)..." :class="[
-                        'w-full pl-4 pr-12 py-4 bg-slate-50 border-2 rounded-2xl transition-all outline-none text-lg',
-                        errorMsg ? 'border-red-300 focus:border-red-500 bg-red-50 text-red-900' : 'border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
-                    ]" />
+                <input v-model="query" @keyup.enter="handleSearch" @input="errorMsg = ''" type="text"
+                    placeholder="ระบุ HN, เลขบัตรฯ หรือ ชื่อผู้ป่วย..."
+                    class="w-full pl-4 pr-12 py-4 bg-slate-50 border-2 rounded-2xl transition-all outline-none text-lg border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                    :class="{ 'border-red-300 bg-red-50 text-red-900': errorMsg }" />
                 <button @click="handleSearch"
                     class="absolute right-2 top-2 bottom-2 bg-blue-600 text-white p-3 rounded-xl hover:bg-blue-700 active:scale-95 transition-all shadow-md shadow-blue-200">
                     <Search class="w-5 h-5" />
@@ -93,14 +94,14 @@ const handleSearch = async () => {
         <!-- Results List -->
         <div v-else-if="results.length > 0" class="space-y-4 pb-20">
             <div class="text-sm text-slate-500 px-2">
-                ผลการค้นหาของ: <span class="font-bold text-blue-600">{{ query }}</span>
+                ค้นหา: <span class="font-bold text-blue-600">{{ query }}</span>
                 (พบ {{ results.length }} รายการ)
             </div>
 
             <div v-for="(item, idx) in results" :key="idx"
                 class="bg-white p-5 rounded-2xl shadow-sm border-l-4 border-red-500 relative overflow-hidden hover:shadow-md transition-shadow">
 
-                <!-- Header: Drug Name & Date -->
+                <!-- Header: Drug & Date -->
                 <div class="flex justify-between items-start mb-3">
                     <h3 class="text-lg font-bold text-red-600 flex items-center gap-2 bg-red-50 px-3 py-1 rounded-lg">
                         <AlertTriangle class="w-5 h-5" /> {{ item.drug }}
@@ -110,18 +111,25 @@ const handleSearch = async () => {
                     </span>
                 </div>
 
-                <!-- Content: Symptom -->
-                <p class="text-slate-700 text-sm mb-4">
+                <!-- ชื่อผู้ป่วย -->
+                <div v-if="item.patientName"
+                    class="flex items-center gap-2 text-slate-800 font-semibold mb-2 border-b border-slate-50 pb-2">
+                    <UserCircle2 class="w-5 h-5 text-blue-500" />
+                    {{ item.patientName }}
+                    <span class="text-xs text-slate-400 font-normal">(HN: {{ item.hn }})</span>
+                </div>
+
+                <!-- Symptom -->
+                <p class="text-slate-700 text-sm mb-4 pl-1">
                     <span class="font-semibold text-slate-900">อาการ:</span> {{ item.symptom }}
                 </p>
 
-                <!-- Footer: Reporter & Naranjo -->
+                <!-- Footer -->
                 <div class="flex justify-between items-end pt-3 border-t border-slate-100">
                     <div class="text-xs text-slate-400 flex items-center gap-1">
                         <User class="w-3 h-3" /> ผู้รายงาน: {{ item.reporter }}
                     </div>
 
-                    <!-- ✅ แก้ไข 2: เพิ่มการแสดงผล Naranjo Score -->
                     <div v-if="item.naranjo"
                         class="flex items-center gap-1 bg-orange-50 text-orange-700 px-2 py-1 rounded-lg text-xs font-bold border border-orange-100">
                         <Calculator class="w-3 h-3" />
@@ -135,8 +143,8 @@ const handleSearch = async () => {
         <div v-else-if="searched && !errorMsg"
             class="text-center py-12 bg-white rounded-3xl border border-dashed border-slate-200">
             <FileText class="w-16 h-16 text-slate-300 mx-auto mb-3" />
-            <p class="text-slate-500 font-medium">ไม่พบประวัติการแพ้ยา</p>
-            <p class="text-xs text-slate-400 mt-1">สำหรับ HN/CID: {{ query }}</p>
+            <p class="text-slate-500 font-medium">ไม่พบข้อมูล</p>
+            <p class="text-xs text-slate-400 mt-1">สำหรับ: {{ query }}</p>
         </div>
     </div>
 </template>

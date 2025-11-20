@@ -1,4 +1,3 @@
-// src/types.ts
 export interface ReportData {
   hn: string;
   cid: string;
@@ -8,7 +7,7 @@ export interface ReportData {
   reporter: string;
   note: string;
   naranjo: number;
-  date?: string;
+  naranjoResult?: string;
 }
 
 export interface HistoryItem {
@@ -18,4 +17,5 @@ export interface HistoryItem {
   symptom: string;
   reporter: string;
   naranjo?: string;
+  patientName?: string;
 }
