@@ -62,7 +62,7 @@ Since this project uses Google Sheets as a database, you must set it up first.
 1.  **Clone the repository**
     ```bash
     git clone https://github.com/pharmacist-sabot/smart-adr.git
-    cd smart-adr-web
+    cd smart-adr
     ```
 
 2.  **Install dependencies**
@@ -88,7 +88,7 @@ Since this project uses Google Sheets as a database, you must set it up first.
 ## 📂 Project Structure
 
 ```text
-smart-adr-web/
+smart-adr/
 ├── public/              # Static assets
 ├── src/
 │   ├── components/      # Vue components
