@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import axios from 'axios'
-import { Search, AlertTriangle, Calendar, User, FileText, XCircle, Calculator, UserCircle2 } from 'lucide-vue-next'
+import { Search, AlertTriangle, Calendar, User, FileText, XCircle, Calculator, UserCircle2, Loader2 } from 'lucide-vue-next'
 import type { HistoryItem } from '../types'
 import { isValidCID, isNumeric } from '../utils/validators'
 
@@ -87,8 +87,42 @@ const handleSearch = async () => {
         </div>
 
         <!-- Loading State -->
-        <div v-if="loading" class="space-y-3">
-            <div v-for="i in 2" :key="i" class="h-24 bg-slate-200 rounded-2xl animate-pulse"></div>
+        <div v-if="loading" class="space-y-4">
+            <!-- Status Text -->
+            <div class="flex items-center justify-center gap-2 text-blue-600 font-medium py-4 bg-blue-50 rounded-xl animate-pulse">
+                <Loader2 class="w-5 h-5 animate-spin" />
+                กำลังค้นหาข้อมูล...
+            </div>
+
+            <!-- Skeleton Cards -->
+            <div v-for="i in 3" :key="i" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden">
+                <div class="animate-pulse space-y-4">
+                    <!-- Header -->
+                    <div class="flex justify-between items-start">
+                        <div class="h-7 bg-slate-200 rounded-lg w-1/3"></div>
+                        <div class="h-6 bg-slate-100 rounded w-1/4"></div>
+                    </div>
+                    
+                    <!-- Patient Info -->
+                    <div class="h-px bg-slate-50 my-2"></div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 bg-slate-200 rounded-full"></div>
+                        <div class="h-6 bg-slate-200 rounded w-1/2"></div>
+                    </div>
+
+                    <!-- Symptom -->
+                    <div class="space-y-2 pl-1">
+                        <div class="h-4 bg-slate-100 rounded w-3/4"></div>
+                        <div class="h-4 bg-slate-100 rounded w-full"></div>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="flex justify-between items-end pt-2">
+                        <div class="h-4 bg-slate-100 rounded w-1/4"></div>
+                        <div class="h-5 bg-slate-100 rounded w-1/5"></div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Results List -->
