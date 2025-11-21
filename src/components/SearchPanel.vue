@@ -71,7 +71,7 @@ const handleSearch = async () => {
             <div class="relative">
                 <input v-model="query" @keyup.enter="handleSearch" @input="errorMsg = ''" type="text"
                     placeholder="ระบุ HN, เลขบัตรฯ หรือ ชื่อผู้ป่วย..."
-                    class="w-full pl-4 pr-12 py-4 bg-slate-50 border-2 rounded-2xl transition-all outline-none text-lg border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                    class="w-full pl-4 pr-12 py-4 bg-slate-50 border-2 rounded-2xl transition-all outline-none text-sm border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
                     :class="{ 'border-red-300 bg-red-50 text-red-900': errorMsg }" />
                 <button @click="handleSearch"
                     class="absolute right-2 top-2 bottom-2 bg-blue-600 text-white p-3 rounded-xl hover:bg-blue-700 active:scale-95 transition-all shadow-md shadow-blue-200">
