@@ -1,21 +1,21 @@
 # SMART ADR Connect
 
-![Vue.js](https://img.shields.io/badge/Vue.js-3.x-4FC08D?style=for-the-badge&logo=vue.js)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=for-the-badge&logo=typescript)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.x-38B2AC?style=for-the-badge&logo=tailwind-css)
-![Google Apps Script](https://img.shields.io/badge/Backend-Google_Apps_Script-4285F4?style=for-the-badge&logo=google)
+[![Vue.js](https://img.shields.io/badge/Vue.js-3.x-4FC08D?logo=vue.js)](https://vuejs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.x-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
+[![Google Apps Script](https://img.shields.io/badge/Backend-Google_Apps_Script-4285F4?logo=google)](https://developers.google.com/apps-script)
 
 **SMART ADR (Adverse Drug Reaction)** is a serverless Progressive Web Application (PWA) designed to facilitate the reporting and tracking of drug allergies. Developed to address gaps in off-hour reporting and proactive prevention, this tool allows healthcare professionals to search for patient allergy history and submit new ADR reports instantly via a mobile-friendly interface.
 
-## ✨ Key Features
+## Key Features
 
-*   **🔍 Patient History Search:** Instantly search for drug allergy history using Hospital Number (HN) or Citizen ID (CID).
-*   **📝 Proactive Reporting:** A streamlined form for reporting Adverse Drug Reactions (ADR).
-*   **🧮 Naranjo Algorithm Calculator:** Built-in interactive tool to assess the probability of the ADR.
-*   **📱 Mobile-First Design:** Optimized for mobile use by nurses and pharmacists on rounds.
-*   **☁️ Serverless Architecture:** Powered by Google Sheets and Google Apps Script for zero-cost infrastructure and ease of maintenance.
+*   **Patient History Search:** Instantly search for drug allergy history using Hospital Number (HN) or Citizen ID (CID).
+*   **Proactive Reporting:** A streamlined form for reporting Adverse Drug Reactions (ADR).
+*   **Naranjo Algorithm Calculator:** Built-in interactive tool to assess the probability of the ADR.
+*   **Mobile-First Design:** Optimized for mobile use by nurses and pharmacists on rounds.
+*   **Serverless Architecture:** Powered by Google Sheets and Google Apps Script for zero-cost infrastructure and ease of maintenance.
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 *   **Frontend Framework:** Vue.js 3 (Composition API)
 *   **Language:** TypeScript
@@ -25,7 +25,7 @@
 *   **Backend / API:** Google Apps Script (GAS)
 *   **Database:** Google Sheets
 
-## 🚀 Getting Started
+## Getting Started
 
 Follow these instructions to set up the project on your local machine for development.
 
@@ -85,7 +85,7 @@ Since this project uses Google Sheets as a database, you must set it up first.
 
 5.  Open your browser and navigate to `http://localhost:5173` (or the port shown in your terminal).
 
-## 📂 Project Structure
+## Project Structure
 
 ```text
 smart-adr/
@@ -106,7 +106,7 @@ smart-adr/
 └── tsconfig.json
 ```
 
-## 📦 Build for Production
+## Build for Production
 
 To create a production-ready build:
 
@@ -116,7 +116,7 @@ bun run build
 
 The output will be in the `dist` directory, which can be deployed to any static hosting service (Vercel, Netlify, Firebase Hosting, or GitHub Pages).
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please follow these steps:
 
@@ -126,6 +126,6 @@ Contributions are welcome! Please follow these steps:
 4.  Push to the Branch (`git push origin feature/AmazingFeature`).
 5.  Open a Pull Request.
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
